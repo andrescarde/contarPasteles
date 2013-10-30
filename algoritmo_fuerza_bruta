@@ -1,82 +1,79 @@
 public class Main {
-	
-	public static void main(String[] args) {
+        
+        public static void main(String[] args) {
 
-		// El 1 representa a los dulces, el 3 a las frutas, el 9 a los confites y el 0 a la masita
-		int elementos[] = { 1, 1, 1, 3, 3, 3, 9, 9, 9, 0 };
-		int tablero[][] = new int[n+1][n+1]; //Para simplificar, numero filas y columnas del 1 a 3 (descarto la 0)
-		System.out.println("La cantidad máxima de pasteles ricos que se pueden hacer es:");
-		System.out.println(contarPasteles(tablero,elementos,0,1));
-	}
-	
-	public static int n = 3;
-		
-	private static boolean puedeSerRico (int[][] m, int[] pendientes, int x, int y) {
-		// La idea original era que esta función haga algo mas inteligente para descartar ramas en la busqueda
-		// y tener un algoritmo de backtracking mas interesante.
-		// Pero para el problema planteado (dado que n=3) NO hizo falta y es fuerza bruta "pura" 
-		return true;
-	}
+                // El 1 representa a los dulces, el 3 a las frutas, el 9 a los confites y el 0 a la masita
+                int elementos[] = { 1, 1, 1, 3, 3, 3, 9, 9, 9, 0 };
+                int tablero[][] = new int[n+1][n+1]; //Para simplificar, numero filas y columnas del 1 a 3 (descarto la 0)
+                System.out.println("La cantidad máxima de pasteles ricos que se pueden hacer es:");
+                System.out.println(contarPasteles(tablero,elementos,0,1));
+        }
+        
+        public static int n = 3;
+                
+        private static boolean puedeSerRico (int[][] m, int[] pendientes, int x, int y) {
+                // La idea original era que esta función haga algo mas inteligente para descartar ramas en la busqueda
+                // y tener un algoritmo de backtracking mas interesante.
+                // Pero para el problema planteado (dado que n=3) NO hizo falta y es fuerza bruta "pura"
+                return true;
+        }
 
-	private static boolean esSumaDeTresIgualesOcomodin(int suma) {
-		//Opte por sumar en lugar de evaluar todas las comparaciones 
-		// suma=2 corresponde a 2 dulces y una masita
-		// suma=3 corresponde a 3 dulces
-		// ...
-		// suma=27 corresponde a 3 confites
-		return  (suma == 2 || suma == 3 || suma == 6 || suma == 9 || suma == 18 || suma == 27);
-	}
-	
-	private static boolean esRico (int[][] m) {
-		//Verifico las filas
-		if (esSumaDeTresIgualesOcomodin(m[1][1] + m[2][1] + m[3][1])) return true;
-		if (esSumaDeTresIgualesOcomodin(m[1][2] + m[2][2] + m[3][2])) return true;
-		if (esSumaDeTresIgualesOcomodin(m[1][3] + m[2][3] + m[3][3])) return true;
-		//Verifico las columnas
-		if (esSumaDeTresIgualesOcomodin(m[1][1] + m[1][2] + m[1][3])) return true;
-     	if (esSumaDeTresIgualesOcomodin(m[2][1] + m[2][2] + m[2][3])) return true;
-     	if (esSumaDeTresIgualesOcomodin(m[3][1] + m[3][2] + m[3][3])) return true;
-     	//Si llego aca:
-		return false;
-	}
+        private static boolean sonTodosIgualesOcomodin(int a, int b, int c) {
+        	int suma = a + b + c;
+        	//El 0 es "comodin" (=masita)
+        	return (suma == a *3 || suma == a * 2 || suma == b *2); 
+    }
+        
+        private static boolean esRico (int[][] m) {
+            ///Verifico las filas
+            if (sonTodosIgualesOcomodin(m[1][1] , m[2][1] , m[3][1])) return true;
+            if (sonTodosIgualesOcomodin(m[1][2] , m[2][2] , m[3][2])) return true;
+            if (sonTodosIgualesOcomodin(m[1][3] , m[2][3] , m[3][3])) return true;
+            //Verifico las columnas
+            if (sonTodosIgualesOcomodin(m[1][1] , m[1][2] , m[1][3])) return true;
+            if (sonTodosIgualesOcomodin(m[2][1] , m[2][2] , m[2][3])) return true;
+            if (sonTodosIgualesOcomodin(m[3][1] , m[3][2] , m[3][3])) return true;
+            //Si llego aca:
+            return false;
+        }
 
-	private static int[] copiarIngredientesSacandoElUsado(int[] ingredientes, int usado) {
-		
-		int result[] = new int[ingredientes.length -1];
-		int i = 0;
-		boolean yaEncontre = false;
-		
-		for (int each : ingredientes) {
-			if (!yaEncontre && each == usado)
-				yaEncontre = true;
-			else {
-				result[i] = each;
-				i++;
-			}
-		}
-		return result;
-	}
-	
-	private static int contarPasteles(int[][] tablero, int[] ingredientes, int x, int y) {
-		
-		int result = 0;
-		int[] ingredientesPendientes;
-		if (x==n && y==n) {
-			if (esRico(tablero)) { 
-				result = 1;
-			}
-		}
-		else {
-			if (puedeSerRico(tablero,ingredientes,x,y)) {
-				if (x==n) { x = 1; y++;} else x++; //Completo de izquierda a derecha y luego hacia abajo
-				for (int each : ingredientes) {
-					tablero[x][y] = each;
-					ingredientesPendientes = copiarIngredientesSacandoElUsado(ingredientes, each);
-					result = result + contarPasteles(tablero, ingredientesPendientes, x, y);
-				}
-			}
-		}
-		return result;
-	}
-	
+        private static int[] copiarIngredientesSacandoElUsado(int[] ingredientes, int usado) {
+                
+                int result[] = new int[ingredientes.length -1];
+                int i = 0;
+                boolean yaEncontre = false;
+                
+                for (int each : ingredientes) {
+                        if (!yaEncontre && each == usado)
+                                yaEncontre = true;
+                        else {
+                                result[i] = each;
+                                i++;
+                        }
+                }
+                return result;
+        }
+        
+        private static int contarPasteles(int[][] tablero, int[] ingredientes, int x, int y) {
+                
+                int result = 0;
+                int[] ingredientesPendientes;
+                if (x==n && y==n) {
+                        if (esRico(tablero)) {
+                                result = 1;
+                        }
+                }
+                else {
+                        if (puedeSerRico(tablero,ingredientes,x,y)) {
+                                if (x==n) { x = 1; y++;} else x++; //Completo de izquierda a derecha y luego hacia abajo
+                                for (int each : ingredientes) {
+                                        tablero[x][y] = each;
+                                        ingredientesPendientes = copiarIngredientesSacandoElUsado(ingredientes, each);
+                                        result = result + contarPasteles(tablero, ingredientesPendientes, x, y);
+                                }
+                        }
+                }
+                return result;
+        }
+        
 }

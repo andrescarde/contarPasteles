@@ -23,7 +23,7 @@ public class Main {
 		// suma=2 corresponde a 2 dulces y una masita
 		// suma=3 corresponde a 3 dulces
 		// ...
-		// suma=18 corresponde a 3 confites
+		// suma=27 corresponde a 3 confites
 		return  (suma == 2 || suma == 3 || suma == 6 || suma == 9 || suma == 18 || suma == 27);
 	}
 	
